@@ -1,0 +1,38 @@
+Private:
+    Creating, Updating and Deleteing:
+        Messages
+        Documents
+        Scenarios
+        Characters
+        Assignments
+        Skill-Scores
+        Checkpoints
+        Briefings
+        
+    All Aspects of:
+        Authentication
+        Student Data/Creation
+        Faculty Creation
+
+
+Public:
+    
+    Just Retrieving:
+        Messages
+        Documents
+        Scenarios
+        Characters
+        Assignments
+        Skill-Scores
+        Checkpoints
+        Checkpoints
+        Briefings
+    Creating and Retrieving:
+        Feedback
+        Evaluations
+
+    Creating, Getting, Updating:
+        Attempts
+        Student-Choices
+
+    Logging In for both Faculty or students

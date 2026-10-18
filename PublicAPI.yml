@@ -1,0 +1,152 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/personalinc-7c4/GroupCAPI/1.0.0
+info:
+  description: This is the Public API for the Student/Faculty Scenario Client.
+  version: "1.0.0"
+  title: Student/Faculty Scenario Client Public API
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: Student Info
+    description:
+  - name: Student Services
+    description:
+  - name: Scenario Services #Assignment/Attempt Services here?
+    description:
+  - name: Message Services
+    description: 
+  - name: Authentication
+    description: Endpoints for student and faculty login/logout
+
+paths:
+  /message:
+    get:
+      description: This returns details about the requested message
+      responses:
+        '200':
+          description: Returns the requested message
+          content:
+            application/json:
+              schema:
+                type: integer
+                items:
+                  
+                
+      parameters:
+
+
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Log in a student or faculty member
+      description: Authenticates user and returns a session token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password_hash
+              properties:
+                username:
+                  type: string
+                  description: Username of the user.
+                  example: student1234
+                password_hash:
+                  type: string
+                  description: Password hash associated with the account, to encrypt the password, use SHA256.
+                  example: a38edf08e993366a0f75c516b8ee712afbbc1573950450f64e7fe5446ec8d427 (examplePassword123)
+      responses:
+        '200':
+          description: Login Successful.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuthenticationSuccess' #got it to use with the Schema, make sure to use array if you use that
+        '400':
+          description: Invalid or missing request information.
+        '401':
+          description: Incorrect username/password/
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Log out a user
+      description: Logs out an authenticated student or faculty member by invalidating their session.
+      operationId: logout
+      security:
+      - bearerAuth: []
+      responses:
+        '204':
+          description: Logout successful. No response body.
+        '401':
+          description: Invalid, expired, or missing authentication token.
+      
+              
+                
+
+
+
+
+
+components:
+  schemas:
+    AuthenticationSuccess: #Use for 200 response example
+      type: object
+      required:
+        - success
+        - message
+        - data
+        - timestamp
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Authentication Successful
+        data:
+          type: object
+          example:
+            {
+                "user_id": 42522,
+                "user_name": "student1234",
+                "role": "student",
+                "token": {
+                  "access_token": "1234",
+                  "token_type": "",
+                  "expires_in": 7200
+                }
+            }
+        timestamp: 
+          type: string
+          format: date-time
+          example: '2026-10-17T12:00:00Z'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Authentication uses the access token returned by logging in.
+
+#you should be able to port over the response schemas from Private API for 
+#         Messages
+#         Documents
+#         Scenarios
+#         Characters
+#         Assignments
+#         Skill-Scores
+#         Checkpoints
+#         Briefings
+#I am going to bed now, good luck

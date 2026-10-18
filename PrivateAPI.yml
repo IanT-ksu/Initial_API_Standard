@@ -1,0 +1,371 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/personalinc-7c4/GroupCAPI/1.0.0
+info:
+  description: This is the private API for the Student/Faculty Scenario Client.
+  version: "1.0.0"
+  title: Student/Faculty Scenario Client Private API
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: Student Info
+    description:
+  - name: Faculty Services
+    description: Services for Faculty to Assign and Access
+  - name: Scenario Services
+    description: Calls for creating scenarios, document
+  - name: Authentication 
+    description:
+
+paths:
+  /student_info:
+    get:
+      tags: 
+        -Student Info
+      summary: retrieves information about student(s) data. Such as Name, Id, and username.
+
+
+
+
+  /scenarios:
+    post:
+      tags: -Scenarios
+      summary: Creates a scenario
+      operationId: create_scenario
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scenario'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Scenario with that name already exists
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schema/Scenario'
+      security:
+      - facultyAuth: []
+
+    patch:
+      tags: -Scenarios
+      summary: Updates a scenario
+      operationId: update_scenario
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scenario'
+        '400':
+          description: Invalid input
+          conent:
+
+        '404':
+          description: Scenario not found
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schema/Scenario'
+      security:
+      - facultyAuth: []
+
+    delete:
+
+  
+
+
+schemas:
+  Error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+        example: Error message
+
+
+  Student:
+    type: object
+    required:
+      - student_id
+      - name
+      - username
+    properties:
+      student_id:
+        type: integer
+        format: int32
+        example: 12345
+      name:
+        type: string
+        example: Example Student
+      username:
+        type: string
+        example: students1234
+
+  Scenario:
+    type: object
+    required:
+      - scenario_id
+      - faculty_id
+      - name
+      - description
+      - status
+    properties:
+      scenario_id:
+        type: integer
+        format: int32
+        example: 1
+      faculty_id:
+        type: integer
+        format: int32
+        example: 12345
+      name:
+        type: string
+        example: Example Scenario
+      description:
+        type: string
+        example: This is an example scenario.
+      status:
+        type: string
+        enum:
+          - active
+          - inactive
+        example: active
+      duration:
+        type: string
+        example: 14 days
+      company_info:
+        type: object
+        properties:
+          company_name:
+            type: string
+            example: Example Company
+          company_address:
+            type: string
+            example: 123 Example St, Marietta, GA, USA
+          company_description:
+            type: string
+            example: This company is an example company that will be used to "train" students.
+      associated_document_id(s):
+        type: array
+        items:
+          type: integer
+          format: int32
+        example: 12345, 67890, 24680
+      associated_character_id(s):
+        type: array
+        items:
+          type: integer
+          format: int32
+        example: 13579, 24680, 11223
+      associated_message_id(s):
+        type: array
+        items:
+          type: integer
+          format: int32
+        example: 29810, 29811, 29812
+      associated_briefing_id(s):
+        type: array
+        items:
+          type: integer
+          format: int32
+        example: 29810, 29811, 29812
+      associated_checkpoint(s):
+        type: object
+        example:
+          checkpoint_1:
+            type: string
+            example: This is the first checkpoint.
+          checkpoint_2:
+            type: string
+            example: This is the second checkpoint.
+          checkpoint_3:
+            type: string
+            example: This is the third checkpoint.
+      
+  
+  Assignments:
+    type: object
+    required:
+      - assignment_id
+      - scenario_id
+      - student_id
+      - status
+    properties:
+      assignment_id:
+        type: integer
+        format: int32
+        example: 01643
+      scenario_id:
+        type: integer
+        format: int32
+        example: 00238
+      student_id:
+        type: integer
+        format: int32
+        example: 12345
+      status:
+        type: string
+        enum:
+          - assigned
+          - completed
+          - in_progress
+        example: assigned
+      due_date:
+        type: string
+        format: date
+        example: 2026-10-27
+
+  Results:
+    type: object
+    required:
+      - result_id
+      - attempt_id
+      - score
+      - self_eval_id(s)
+    properties:
+      result_id:
+        type: integer
+        format: int32
+        example: 98765
+      attempt_id:
+        type: integer
+        format: int32
+        example: 01643
+      skill_id(s):
+        type: array
+        items:
+          type: integer
+          format: int32
+        example: 29810, 29811, 29812
+      score:
+        type: array
+        items:
+          type: integer
+          format: int32
+        example: 250, 80, 900
+      self_eval_id(s):
+        type: array
+        items:
+          type: integer
+          format: int32
+          example: 15678, 15700
+
+  Documents:
+    type: object
+    required:
+      - document_id
+      - scenario_id
+      - title
+      - content
+    properties:
+      document_id:
+        type: integer
+        format: int32
+        example: 12345
+      scenario_id:
+        type: integer
+        format: int32
+        example: 00238
+      title:
+        type: string
+        example: Example Document Title
+      content:
+        type: string
+        example: This is the content of the example document.
+  
+  Characters:
+    type: object
+    required:
+      - character_id
+      - scenario_id
+      - name
+      - role
+    properties:
+      character_id:
+        type: integer
+        format: int32
+        example: 67890
+      scenario_id:
+        type: integer
+        format: int32
+        example: 00238
+      name:
+        type: string
+        example: Deadman Danny
+      role:
+        type: string
+        example: Corporate Shill
+      role_description:
+        type: string
+        example: Why is Deadman Danny here? I can tell you... I played deadlock and I am hooked now. I get one joke per assignment and here it is.
+
+  Briefings:
+    type: object
+    required:
+      - briefing_id
+      - scenario_id
+      - role_description
+    properties:
+      briefing_id:
+        type: integer
+        format: int32
+        example: 24680
+      scenario_id:
+        type: integer
+        format: int32
+        example: 00238
+      role_description:
+        type: string
+        example: Your role at this company is to complete certain tasks at this company. Like a job. This is a job.
+      content:
+        type: string
+        example: You are working for the company in this scenario, and they are indeed... a company...
+
+  faculty_creation_response:
+    type: object
+    rquired:
+      -success
+      -status
+    properties:
+      success:
+        type: boolean
+        example: true
+      status:
+        type: string
+        example: Faculty account created successfully!
+      faculty_id:
+        type: integer
+        format: int32
+        example: 12345
+      faculty_name:
+        type: string
+        example: Example Faculty
+      faculty_username:
+        type: string
+        example: faculty1234
+      timestamp: 
+          type: string
+          format: date-time
+          example: '2026-10-17T12:00:00Z'
